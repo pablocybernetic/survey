@@ -38,7 +38,7 @@ export default function Login() {
         Sign in to your account
       </h2>
 
-      {errors?.error && (
+      {errors.error && (
         <div className='bg-red-500 rounded my-2 p-3 shadow'>
           <span className='text-sm text-white'>
             {errors.error}
