@@ -86,18 +86,28 @@ class DashboardController extends Controller
     /*
      * Get top surveys
      * */
-
+// doesnt load 
+    // private function getTopSurveys($userId)
+    // {
+    //     return Survey::select('surveys.*', DB::raw('COUNT(survey_answers.id) as total_answers'))
+    //         ->where('surveys.user_id', $userId)
+    //         ->leftJoin('survey_answers', 'surveys.id', '=', 'survey_answers.survey_id')
+    //         ->groupBy('surveys.id')
+    //         ->orderByDesc('total_answers')
+    //         ->limit(10)
+    //         ->get();
+    // }
     private function getTopSurveys($userId)
     {
-        return Survey::select('surveys.*', DB::raw('COUNT(survey_answers.id) as total_answers'))
+        return Survey::select('surveys.id', 'surveys.title', 'surveys.created_at', DB::raw('COUNT(survey_answers.id) as total_answers'))
             ->where('surveys.user_id', $userId)
             ->leftJoin('survey_answers', 'surveys.id', '=', 'survey_answers.survey_id')
-            ->groupBy('surveys.id')
+            ->groupBy('surveys.id', 'surveys.title', 'surveys.created_at')
             ->orderByDesc('total_answers')
             ->limit(10)
             ->get();
     }
-
+    
     /*
      * Get list of uncompleted answers
      * */
