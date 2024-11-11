@@ -7,6 +7,8 @@ use App\Models\SurveyAnswer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class DashboardController extends Controller
 {
@@ -71,10 +73,12 @@ class DashboardController extends Controller
             ->first(['end_date']);
     }
 
-    /*
+ 
+
+
+   /*
      * Get total completed answers
      * */
-
     public function getTotalCompletedAnswers($userId)
     {
         return SurveyAnswer::join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
@@ -184,4 +188,36 @@ class DashboardController extends Controller
             'data' => array_values($data)
         ];
     }
+// In Survey.php (Model)
+public function questions()
+{
+    return $this->hasMany(SurveyQuestion::class);
+}
+
+
+// In SurveyQuestion.php (Model)
+public function answers()
+{
+    return $this->hasMany(SurveyAnswer::class);
+}
+
+
+public function getAllAnswers()
+{
+    // Query to get all questions and answers, including those with no answers
+    $results = DB::table('survey_questions as sq')
+        ->leftJoin('survey_question_answers as sqqa', 'sq.id', '=', 'sqqa.survey_question_id')
+        ->select('sq.id as question_id', 'sq.question', 'sq.type as question_type', 'sqqa.survey_answer_id', 'sqqa.answer')
+        ->orderBy('sq.id')
+        ->orderBy('sqqa.survey_answer_id')
+        ->get();
+
+    // If you want the results grouped by the question
+    $groupedResults = $results->groupBy('question_id');
+
+    return $groupedResults;
+}
+
+
+
 }
