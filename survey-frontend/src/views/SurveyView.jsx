@@ -1,6 +1,6 @@
 import DashboardPage from "../components/DashboardPage.jsx";
 import {useEffect, useState} from "react";
-import {FiExternalLink, FiSave, FiTrash} from "react-icons/fi";
+import {FiExternalLink, FiSave, FiTrash,FiTrendingUp} from "react-icons/fi";//icons
 import {HiOutlinePhoto} from "react-icons/hi2";
 import CustomButton from "../components/core/CustomButton.jsx";
 import Axios from "../services/axios.js";
@@ -8,6 +8,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import SurveyQuestions from "../components/surveys/SurveyQuestions.jsx";
 import {BeatLoader} from "react-spinners";
 import {useStateContext} from "../contexts/ContextProvider.jsx";
+// import { FiTrendingUp, FiExternalLink, FiTrash } from 'react-icons/fi'; //icons
 
 export default function SurveyView() {
   const navigate = useNavigate()
@@ -131,7 +132,11 @@ export default function SurveyView() {
       <DashboardPage title={slug ? 'Update Survey' : 'Create new Survey'} buttons={(
         <div>
           {slug && (
-            <div className='flex flex-row gap-2 items-center justify-around'>
+            <div className='flex flex-row items-center justify-around gap-2'>
+             
+              <CustomButton     link to={`/statistics/${survey.slug}`}target='_blank'>
+                <FiTrendingUp className='w-5 h-5 mr-2'/> Statistics
+              </CustomButton>
               <CustomButton link to={`/view/surveys/${survey.slug}`} target='_blank'>
                 <FiExternalLink className='w-5 h-5 mr-2'/> Public Link
               </CustomButton>
@@ -143,38 +148,38 @@ export default function SurveyView() {
         </div>
       )}>
         {loading && (
-          <div className='text-center m-8'>
+          <div className='m-8 text-center'>
             <BeatLoader color="#3b82f6"/>
           </div>
         )}
         {!loading && (
           <form action="#" method="POST" onSubmit={handleSubmit}>
-            <div className='shadow-md sm:overflow-hidden sm:rounded-lg p-6'>
-              <div className='space-y-6 bg-white px-4 py-5 sm:p-6'>
+            <div className='p-6 shadow-md sm:overflow-hidden sm:rounded-lg'>
+              <div className='px-4 py-5 space-y-6 bg-white sm:p-6'>
                 {/* Survey Image */}
                 {/* TODO: clicking outside the button trigger the file select */}
                 <label htmlFor="image_field" className='block text-sm font-medium text-gray-700'>
                   Picture
                 </label>
-                <div className="mt-1 flex items-center">
+                <div className="flex items-center mt-1">
                   {survey.image_url && (
                     <img
                       src={survey.image_url}
                       alt={survey.title || 'Image'}
-                      className='w-32 h-32 object-cover'
+                      className='object-cover w-32 h-32'
                     />
                   )}
 
                   {!survey.image_url && (
                     <span
-                      className="flex justify-center items-center text-gray-400 h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+                      className="flex items-center justify-center w-12 h-12 overflow-hidden text-gray-400 bg-gray-100 rounded-full">
                     <HiOutlinePhoto className="w-8 h-8"/>
                   </span>
                   )}
 
                   <button
                     type="button"
-                    className="relative overflow-hidden ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    className="relative px-3 py-2 ml-5 overflow-hidden text-sm font-medium leading-4 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     <input type="file" id='image_field' className='absolute inset-0 opacity-0'
                            onChange={handleImageUpload}/>
                     Change
@@ -188,10 +193,10 @@ export default function SurveyView() {
                     Survey Title
                   </label>
                   <input type="text" name='title' id='title' value={survey.title} placeholder='Survey Title'
-                         className='block input border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm w-full'
+                         className='block w-full border-gray-300 input focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm'
                          onChange={(event) => setSurvey({...survey, title: event.target.value})}/>
                   {errors.title && (
-                    <span className='text-sm text-red-500 p-1'>
+                    <span className='p-1 text-sm text-red-500'>
                       {errors.title}
                   </span>
                   )}
@@ -205,7 +210,7 @@ export default function SurveyView() {
                   </label>
                   <textarea name='description' id='description' value={survey.description || ''}
                             placeholder='Survey Description'
-                            className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-50 focus:ring-2 focus:ring-blue-500 sm:text-sm'
+                            className='block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-blue-50 focus:ring-2 focus:ring-blue-500 sm:text-sm'
                             onChange={(event) => setSurvey({...survey, description: event.target.value})}></textarea>
                 </div>
                 {/* // Survey Description */}
@@ -216,10 +221,10 @@ export default function SurveyView() {
                     Expire Date
                   </label>
                   <input type="date" name='expire_date' id='expire_date' value={survey.expire_date}
-                         className='block input border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm w-full'
+                         className='block w-full border-gray-300 input focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm'
                          onChange={(event) => setSurvey({...survey, expire_date: event.target.value})}/>
                   {errors.expire_date && (
-                    <span className='text-sm text-red-500 p-1'>
+                    <span className='p-1 text-sm text-red-500'>
                       {errors.expire_date}
                   </span>
                   )}
@@ -228,9 +233,9 @@ export default function SurveyView() {
 
                 {/* Survey Status */}
                 <div className="flex items-start">
-                  <div className="flex h-5 items-center">
+                  <div className="flex items-center h-5">
                     <input type="checkbox" id="status" name="status" checked={survey.status}
-                           className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                           className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                            onChange={(event) => setSurvey({...survey, status: event.target.checked})}/>
                   </div>
                   <div className='ml-3 text-sm'>
@@ -250,7 +255,7 @@ export default function SurveyView() {
                 <SurveyQuestions questions={survey.questions} onQuestionsUpdate={onQuestionsUpdate}/>
                 {/* // Survey Questions */}
               </div>
-              <div className='bg-gray-50 px-4 py-3 text-right sm:px-6'>
+              <div className='px-4 py-3 text-right bg-gray-50 sm:px-6'>
                 <CustomButton type='submit'>
                   <FiSave className="w-5 h-5"/> Save
                 </CustomButton>

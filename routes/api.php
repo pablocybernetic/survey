@@ -12,10 +12,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // dashboard
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
-    Route::get('/responses', [\App\Http\Controllers\DashboardController::class, 'getAllAnswers']);
+    Route::get('/responses/{{slug}}', [\App\Http\Controllers\DashboardController::class, 'getAllAnswers']);
 
 });
-Route::get('/responses', [\App\Http\Controllers\DashboardController::class, 'getAllAnswers']);
+Route::get('/responses/{slug}', [\App\Http\Controllers\DashboardController::class, 'getAllAnswers']);
 
 
 Route::post('/signup', [AuthController::class, 'signup']);

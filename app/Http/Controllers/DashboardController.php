@@ -7,8 +7,6 @@ use App\Models\SurveyAnswer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-
 
 class DashboardController extends Controller
 {
@@ -32,10 +30,9 @@ class DashboardController extends Controller
             'completed_percentage' => $this->getPercentageOfCompletedAnswers($user->id, $startOfMonth, $endOfMonth),
             'total_remaining_answers' => $this->getUnCompletedAnswers($user->id)->count(),
             'answers_compared_to_last_month_percentage' => $this->percentageOfAnswersChangeBetween($user->id, $startOfLastMonth, $endOfLastMonth),
-            'top_surveys' => $this->getTopSurveys($user->id)
+            'top_surveys' => $this->getTopSurveys($user->id),
         ];
     }
-
 
     /*
      * Get total surveys
@@ -73,10 +70,7 @@ class DashboardController extends Controller
             ->first(['end_date']);
     }
 
- 
-
-
-   /*
+    /*
      * Get total completed answers
      * */
     public function getTotalCompletedAnswers($userId)
@@ -90,7 +84,7 @@ class DashboardController extends Controller
     /*
      * Get top surveys
      * */
-// doesnt load 
+// doesnt load
     // private function getTopSurveys($userId)
     // {
     //     return Survey::select('surveys.*', DB::raw('COUNT(survey_answers.id) as total_answers'))
@@ -111,7 +105,7 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
     }
-    
+
     /*
      * Get list of uncompleted answers
      * */
@@ -185,39 +179,72 @@ class DashboardController extends Controller
 
         return [
             'labels' => $labels,
-            'data' => array_values($data)
+            'data' => array_values($data),
         ];
     }
 // In Survey.php (Model)
-public function questions()
+
+
+public function getAllAnswers($slug)
 {
-    return $this->hasMany(SurveyQuestion::class);
-}
-
-
-// In SurveyQuestion.php (Model)
-public function answers()
-{
-    return $this->hasMany(SurveyAnswer::class);
-}
-
-
-public function getAllAnswers()
-{
-    // Query to get all questions and answers, including those with no answers
+    // Use the provided slug instead of hardcoding it
+    // Query to get all questions and answers for a specific survey based on the slug
     $results = DB::table('survey_questions as sq')
         ->leftJoin('survey_question_answers as sqqa', 'sq.id', '=', 'sqqa.survey_question_id')
-        ->select('sq.id as question_id', 'sq.question', 'sq.type as question_type', 'sqqa.survey_answer_id', 'sqqa.answer')
+        ->join('surveys as s', 's.id', '=', 'sq.survey_id') // Join with surveys table
+        ->where('s.slug', '=', $slug) // Use the provided slug
+        ->select(
+            'sq.id as question_id',
+            'sq.question',
+            'sq.type as question_type',
+            'sq.data as question_data', // Retrieve the 'data' field with options
+            'sqqa.survey_answer_id',
+            'sqqa.answer'
+        )
         ->orderBy('sq.id')
         ->orderBy('sqqa.survey_answer_id')
         ->get();
 
-    // If you want the results grouped by the question
+    // Process and group the results as before
     $groupedResults = $results->groupBy('question_id');
+
+    foreach ($groupedResults as $question_id => $answers) {
+        $question_data = json_decode($answers[0]->question_data, true);
+        $options = $question_data['options'] ?? [];
+
+        // Map UUIDs to text labels
+        $uuidToTextMap = [];
+        foreach ($options as $option) {
+            $uuidToTextMap[$option['uuid']] = $option['text'];
+        }
+
+        foreach ($answers as $answer) {
+            if ($answer->question_type === 'checkbox') {
+                $answerArray = json_decode($answer->answer, true);
+
+                foreach ($answerArray as &$selectedAnswer) {
+                    if (isset($uuidToTextMap[$selectedAnswer['uuid']])) {
+                        $selectedAnswer['text'] = $uuidToTextMap[$selectedAnswer['uuid']];
+                    }
+                }
+
+                $texts = array_map(fn($item) => $item['text'], $answerArray);
+                $answer->answer = implode(', ', $texts);
+
+            } elseif ($answer->question_type === 'radio') {
+                $answerArray = json_decode($answer->answer, true);
+                $answer->answer = $answerArray['text'];
+
+            } else {
+                if (isset($uuidToTextMap[$answer->answer])) {
+                    $answer->answer = $uuidToTextMap[$answer->answer];
+                }
+            }
+        }
+    }
 
     return $groupedResults;
 }
-
 
 
 }

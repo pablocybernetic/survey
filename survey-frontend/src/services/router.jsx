@@ -8,6 +8,7 @@ import GuestLayout from "../Layouts/GuestLayout.jsx";
 import DefaultLayout from "../Layouts/DefaultLayout.jsx";
 import Dashboard from "../views/Dashboard.jsx";
 import SurveyView from "../views/SurveyView.jsx";
+import StatisticsView from "../views/StatisticsView.jsx";
 import PublicSurveyView from "../views/PublicSurveyView.jsx";
 import {ThanksView} from "../views/ThanksView.jsx";
 
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
   {
     path: '/thanks',
     element: <ThanksView/>
+  },
+  {
+    path: '/statistics/:slug',
+    element: <StatisticsView/>
   }
 ]);
 
