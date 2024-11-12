@@ -46,20 +46,20 @@ export default function DefaultLayout() {
   return (<>
     <Toast/>
 
-    <div className="min-h-full container mx-auto p-1">
+    <div className="container min-h-full p-1 mx-auto">
 
       {/* Navbar */}
-      <div className="navbar bg-info text-info-content m-3 rounded-full px-8">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24"
+      <div className="px-8 m-3 bg-green-100 rounded-full navbar text-info-content" style={{ opacity: 0.9 }}>
+      <div className="navbar-start">
+          <div className="text-green-800 dropdown">
+            <label tabIndex={0} className="text-green-800 btn btn-ghost lg:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24"
                    stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16"/>
               </svg>
             </label>
             <ul tabIndex={0}
-                className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+                className="p-2 mt-3 text-yellow-200 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
 
               {navigation.map((item, index) => (<li key={index}>
                 <NavLink
@@ -74,10 +74,12 @@ export default function DefaultLayout() {
 
             </ul>
           </div>
-          <NavLink to='/' className="btn btn-ghost bg-info normal-case text-xl text-white">Surveys</NavLink>
+          <NavLink to='/' className="text-xl text-green-800 normal-case bg-green-100 btn btn-ghost">
+  <img src="https://artcaffemenu.ubuntu.click/images/Artcaffe-Logo.png" alt="Logo" className="w-auto h-8" />
+</NavLink>
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 text-white">
+        <div className="hidden navbar-center lg:flex">
+          <ul className="px-1 text-green-800 menu menu-horizontal">
             {navigation.map((item, index) => (<li key={index}>
               <NavLink
                 key={item.name}
@@ -93,18 +95,18 @@ export default function DefaultLayout() {
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <FiUser className="w-6 h-6 text-white"/>
+              <FiUser className="w-6 h-6 text-green-800"/>
             </label>
             <ul tabIndex={0}
-                className="menu menu-compact dropdown-content mt-3 p-2 shadow-md bg-base-100 rounded-box w-52">
+                className="p-2 mt-3 text-yellow-200 shadow-md menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
               <li>
-                <a className="btn btn-ghost">
+                <a className=" btn btn-ghost">
                   Profile
                 </a>
               </li>
-              <li><a className='btn btn-ghost'>Settings</a></li>
+              <li><a className=' btn btn-ghost'>Settings</a></li>
               <li>
-                <a href="" className='btn btn-ghost'
+                <a href="" className=' btn btn-ghost'
                    onClick={(event) => logout(event)}>Logout</a>
               </li>
             </ul>
