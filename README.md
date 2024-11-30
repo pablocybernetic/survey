@@ -13,7 +13,6 @@ https://user-images.githubusercontent.com/108437129/236502833-0a801458-27fd-4d73
 ## Features
 
 - 🌠 Modern / Clean Design
-- 📱 SPA
 - 📊 Analytics / Statistics
 - 🖥 Response
 
@@ -24,10 +23,10 @@ https://user-images.githubusercontent.com/108437129/236502833-0a801458-27fd-4d73
 
 ```bash
   # using https 
-  git clone https://github.com/ojpro/survey.git
+  git clone https://github.com/pablocybernetic/survey.git
 
   # using ssh
-  git clone git@github.com:ojpro/survey.git
+  git clone git@github.com:pablocybernetic/survey.git
 
 ```
 
@@ -83,9 +82,6 @@ https://user-images.githubusercontent.com/108437129/236502833-0a801458-27fd-4d73
 visit: [http://localhost:5173](http://localhost:5173)
 
 
-## Authors
-
-- [@ojpro](https://www.github.com/ojpro)
 
 
 ## Contributing
