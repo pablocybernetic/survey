@@ -46,48 +46,6 @@ https://user-images.githubusercontent.com/108437129/236502833-0a801458-27fd-4d73
   yarn
 ```
 
-4. Setup Environment Variables
-
-```bash
-  # for laravel
-  cp .env.example .env
-
-  # then configure database connection
-  nano .env
-
-  # for react and vite
-  echo "VITE_API_BASE_URL='http://127.0.0.1:8000'" > ./survey-frontend/.env
-```
-
-5. Start the server 
-
-```bash
-  # inside main directory (survey)
-  php artisan serve
-```
-
-6. Start the React application
-
-```bash
-   cd survey-frontend
-   
-   # using npm
-   npm run dev
-
-   # using yarn
-   yarn dev
-```
-
-🚀 Congratulations the surveys system is up and running,
-visit: [http://localhost:5173](http://localhost:5173)
-
-
-
-
-## Contributing
-
-Contributions are always welcome!
-
 
 ## License
 
