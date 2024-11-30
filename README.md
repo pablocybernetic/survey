@@ -4,9 +4,7 @@
 Survey System using Laravel and React, with beautiful and usefull analytics.
 
 
-## Screenshots
 
-![934shots_so](https://user-images.githubusercontent.com/108437129/236502562-cf3ac0be-fb9a-4e76-b4f5-d3b457914577.png)
 ## Demo
 
 https://user-images.githubusercontent.com/108437129/236502833-0a801458-27fd-4d73-8166-2c1d6c5494f6.mp4
